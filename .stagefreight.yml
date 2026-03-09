@@ -1,7 +1,7 @@
 version: 1
 
 vars:
-  org: sofmeright
+  org: prplanit
   repo: ark-se-oci
 
 sources:
