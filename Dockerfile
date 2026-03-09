@@ -35,9 +35,9 @@ RUN ln -s /usr/local/bin/arkmanager /usr/bin/arkmanager
 
 COPY arkmanager/arkmanager.cfg /etc/arkmanager/arkmanager.cfg
 COPY arkmanager/instance.cfg /etc/arkmanager/instances/main.cfg
-COPY run.sh /home/steam/run.sh
-COPY log.sh /home/steam/log.sh
-COPY health-server.py /home/steam/health-server.py
+COPY scripts/run.sh /home/steam/run.sh
+COPY scripts/log.sh /home/steam/log.sh
+COPY scripts/health-server.py /home/steam/health-server.py
 
 RUN echo "%sudo   ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers \
     && usermod -a -G sudo steam \
