@@ -11,7 +11,7 @@
 [![Paypal](https://img.shields.io/badge/donate-paypal-00457c.svg?logo=paypal)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FTXDN7LCDWUEA&source=url)
 [![GitHub Sponsor](https://img.shields.io/badge/github-sponsor-blue?logo=github)](https://github.com/sponsors/DrPsychick)
 
-# Docker image `drpsychick/arkserver`
+# arkserver
 Docker image for a dedicated ARK Survival Evolved server in a Docker container.
 
 ### Features
