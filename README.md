@@ -12,24 +12,11 @@
 [![GitHub Sponsor](https://img.shields.io/badge/github-sponsor-blue?logo=github)](https://github.com/sponsors/DrPsychick)
 
 # Docker image `drpsychick/arkserver`
-Docker image for a dedicated ARK Survival Evolved server with arkmanager.
-
-**UPDATE August 2022**: I cloned this repo and split from the original, because my PR was never accepted.
-The original is here: [thmhoag/arkserver](https://github.com/thmhoag/arkserver).
-
-## Overview
-
-This is an image for running an ARK: Survival Evolved server in a Docker container.
-It is heavily based off of [TuRz4m](https://github.com/TuRz4m)'s work located here: [TuRz4m/Ark-docker](https://github.com/TuRz4m/Ark-docker).
-It uses [FezVrasta](https://github.com/FezVrasta)'s [arkmanager/ark-server-tools](https://github.com/arkmanager/ark-server-tools)
-to manage single-instances or a cluster of ARK: Survival Evolved server inside a docker containers.
-
-This image builds on the [drpsychick/steamcmd](https://github.com/drpsychick/steamcmd) image to include the latest version of `steamcmd`.
-
-For more information on `arkmanager`, see the repo here: [arkmanager/ark-server-tools](https://github.com/arkmanager/ark-server-tools).
+Docker image for a dedicated ARK Survival Evolved server in a Docker container.
 
 ### Features
 * Automated install (pull the image and run, no additional commands necessary)
+* Built on [drpsychick/steamcmd](https://github.com/drpsychick/steamcmd) with the latest `steamcmd`
 * Configuration via Environment Variables
 * Easy crontab manipulation for automated backups, updates, daily restarts, weekly dino wipes, etc
 * Simple volume structure for server files, config, logs, backups, etc
@@ -50,6 +37,7 @@ For more information on `arkmanager`, see the repo here: [arkmanager/ark-server-
 |                     |                                                     |
 | ------------------- | --------------------------------------------------- |
 | Configuration       | [Environment Variables & Volumes](docs/Configuration.md) |
+| arkmanager          | [arkmanager/ark-server-tools](https://github.com/arkmanager/ark-server-tools) |
 | Health Server       | [RCON Health Endpoint](docs/HealthServer.md)        |
 | Clustering          | [Multi-Map Cluster Setup](docs/Clustering.md)       |
 
@@ -72,3 +60,9 @@ $ docker run -d \
 ```
 
 If the exposed ports are modified (in the case of multiple containers/servers on the same host) the `arkmanager` config will need to be modified to reflect the change as well. This is required so that `arkmanager` can properly check the server status and so that the ARK server itself can properly publish its IP address and query port to steam.
+
+## Credits
+
+* Heavily based on [TuRz4m/Ark-docker](https://github.com/TuRz4m/Ark-docker)
+* Uses [FezVrasta](https://github.com/FezVrasta)'s [arkmanager/ark-server-tools](https://github.com/arkmanager/ark-server-tools) for server management
+* Forked from [thmhoag/arkserver](https://github.com/thmhoag/arkserver) (August 2022 — split after unaccepted PR)
