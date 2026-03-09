@@ -1,1 +1,9 @@
+.git
+.stagefreight
+.gitlab-ci.yml
+.stagefreight.yml
+docker-compose.yml
+renovate.json
+README.md
+LICENSE
 test/
