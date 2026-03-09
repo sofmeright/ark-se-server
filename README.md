@@ -1,6 +1,6 @@
 [![CircleCI](https://img.shields.io/circleci/build/github/SickHub/arkserver)](https://app.circleci.com/pipelines/github/SickHub/arkserver)
 [![Docker image](https://img.shields.io/docker/image-size/drpsychick/arkserver?sort=date)](https://hub.docker.com/r/drpsychick/arkserver/tags)
-[![Docker Pulls](https://img.shields.io/docker/pulls/drpsychick/arkserver.svg?style=flat-square)](https://hub.docker.com/r/drpsychick/arkserver/) 
+[![Docker Pulls](https://img.shields.io/docker/pulls/drpsychick/arkserver.svg?style=flat-square)](https://hub.docker.com/r/drpsychick/arkserver/)
 [![License](https://img.shields.io/dub/l/vibe-d.svg?style=flat-square)](https://github.com/drpsychick/arkserver/blob/master/LICENSE)
 
 [![GitHub issues](https://img.shields.io/github/issues/SickHub/arkserver.svg)](https://github.com/SickHub/arkserver/issues)
@@ -19,8 +19,8 @@ The original is here: [thmhoag/arkserver](https://github.com/thmhoag/arkserver).
 
 ## Overview
 
-This is an image for running an ARK: Survival Evolved server in a Docker container. 
-It is heavily based off of [TuRz4m](https://github.com/TuRz4m)'s work located here: [TuRz4m/Ark-docker](https://github.com/TuRz4m/Ark-docker). 
+This is an image for running an ARK: Survival Evolved server in a Docker container.
+It is heavily based off of [TuRz4m](https://github.com/TuRz4m)'s work located here: [TuRz4m/Ark-docker](https://github.com/TuRz4m/Ark-docker).
 It uses [FezVrasta](https://github.com/FezVrasta)'s [arkmanager/ark-server-tools](https://github.com/arkmanager/ark-server-tools)
 to manage single-instances or a cluster of ARK: Survival Evolved server inside a docker containers.
 
@@ -34,12 +34,21 @@ For more information on `arkmanager`, see the repo here: [arkmanager/ark-server-
 * Easy crontab manipulation for automated backups, updates, daily restarts, weekly dino wipes, etc
 * Simple volume structure for server files, config, logs, backups, etc
 * Inherently includes all features present in `arkmanager`
+* Optional [RCON health server](docs/HealthServer.md) for application-level readiness checks
 
 ### Tags
 | Tag            | Description                              |
 |----------------|------------------------------------------|
 | latest         | most recent build from the master branch |
 | x.x.x (semver) | release builds                           |
+
+### Documentation
+
+|                     |                                                     |
+| ------------------- | --------------------------------------------------- |
+| Configuration       | [Environment Variables & Volumes](docs/Configuration.md) |
+| Health Server       | [RCON Health Endpoint](docs/HealthServer.md)        |
+| Clustering          | [Multi-Map Cluster Setup](docs/Clustering.md)       |
 
 ## Usage
 
@@ -85,10 +94,12 @@ A set of required environment variables have default values provided as part of 
 | LOG_RCONCHAT               | `0`           | Fetch chat commands every X seconds and log them to stdout, `0` = disabled   |
 | AM_INSTALL_ARGS            |               | Optional arguments to `arkmanager install`, for example `--beta=preaquatica` |
 | AM_UPDATE_ARGS             |               | Optional arguments to `arkmanager update`                                    |
+| HEALTH_SERVER              | `false`       | Enable the optional [RCON health server](docs/HealthServer.md)               |
+| HEALTH_SERVER_PORT         | `8080`        | Port the health server listens on                                            |
 
 ### Adding Additional Variables
 
-Any configuration value that is available via `arkmanager` can be set using an environment variable. This works by taking any environment variable on the container that is prefixed with `am_` and mapping it to the corresponding environment variable in the `arkmanager.cfg` file. 
+Any configuration value that is available via `arkmanager` can be set using an environment variable. This works by taking any environment variable on the container that is prefixed with `am_` and mapping it to the corresponding environment variable in the `arkmanager.cfg` file.
 
 For a complete list of configuration values available, please see [FezVrasta](https://github.com/arkmanager)'s great documentation here: [arkmanager Configuration Files](https://github.com/arkmanager/ark-server-tools#configuration-files)
 
@@ -131,54 +142,11 @@ Inside the `/ark` volume there are several directories containing server related
 | /ark/staging | Default directory for staging game and mod updates. Can be changed using in `arkmanager.cfg`                                             |
 
 ## Running a cluster
-In order to run an ARK cluster, all you need are multiple servers sharing the `clusters` directory and using a shared, 
-unique `clusterid` - and a lot of RAM.
-Additionally you can share the server files, so that all servers use the same version and you don't have to 
-store identical files twice on disk.
 
-Example: (using the .env files in `/test`)
-```shell script
-IMAGE=drpsychick/arkserver
-TAG=bionic
-mkdir -p theisland ragnarok arkserver arkclusters theisland/saved ragnarok/saved
+See [Clustering](docs/Clustering.md) for full documentation on running a multi-map ARK cluster.
 
-# start server 1 with am_arkAutoUpdateOnStart=true
-serverdir=theisland
-docker run --rm -it --name $serverdir \
-  --env-file test/ark-$serverdir.env \
-  -v $PWD/$serverdir:/ark \
-  -v $PWD/$serverdir/saved:/arkserver/ShooterGame/Saved \
-  -v $PWD/arkclusters:/arkserver/ShooterGame/Saved/clusters \
-  -v $PWD/arkserver:/arkserver \
-  -p 27015:27015/udp -p 7778:7778/udp -p 32330:32330 \
-  $IMAGE:$TAG
+## Health Server
 
-# wait for the server to be up, it should download all mods and the game
+An optional HTTP health server that validates RCON connectivity. Enable with `HEALTH_SERVER=true`.
 
-# start server 2+ with am_arkAutoUpdateOnStart=false
-# using the SAME `arkserver` and `arkclusters` directory
-serverdir=ragnarok
-docker run --rm -it --name $serverdir \
-  --env-file test/ark-$serverdir.env \
-  -v $PWD/$serverdir:/ark \
-  -v $PWD/$serverdir/saved:/arkserver/ShooterGame/Saved \
-  -v $PWD/arkclusters:/arkserver/ShooterGame/Saved/clusters \
-  -v $PWD/arkserver:/arkserver \
-  -p 27016:27016/udp -p 7780:7780/udp -p 32331:32331 \
-  $IMAGE:$TAG
-
-# now you can reach your servers on 27015 and 27016 respectively
-
-# cleanup
-rm -rf theisland ragnarok arkserver arkclusters
-```
-
-To test jumping from one server to another:
-* join one server, enable cheats with `enablecheats <adminpassword>`
-* cheat your character the transmitter tek engram `cheat GiveTekengramsTo <survivorID> transmitter`
-* cheat your character a transmitter item `cheat gfi TekTransmitter 1 1 0`
-* place the transmitter, turn it on, enter the inventory -> you should see "travel to another server" button in the middle
-* click it and select the server you want to travel to
-
-The `survivorID` is the number displayed when you hover over the specimen implant (diamond shaped item) 
-you always have (https://ark.fandom.com/wiki/Specimen_Implant). 
+See [Health Server](docs/HealthServer.md) for full documentation, Kubernetes examples, and endpoint details.

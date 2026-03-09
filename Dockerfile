@@ -75,4 +75,7 @@ VOLUME /arkserver
 
 EXPOSE 8080
 
+HEALTHCHECK --interval=30s --timeout=15s --start-period=120s --retries=3 \
+    CMD arkmanager rconcmd "ListPlayers" || exit 1
+
 CMD [ "./run.sh" ]
