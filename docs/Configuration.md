@@ -60,6 +60,7 @@ am_arkflag_ForceAllowCaveFlyers=
 
 | Path                                    | Required | Description                                                              |
 |-----------------------------------------|----------|--------------------------------------------------------------------------|
+| `/home/steam/.steam/steamapps`          | Optional | Steamapps and workshop files — mount to persist mod downloads            |
 | `/ark`                                  | Yes      | Server config, logs, backups, and (if not shared) game files             |
 | `/arkserver`                            | Optional | Shared server binary files (`ARKSERVER_SHARED=/arkserver`)               |
 | `/arkserver/ShooterGame/Saved`          | Depends  | Per-instance save files — **required** when using shared server files    |
