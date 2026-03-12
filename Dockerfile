@@ -31,6 +31,16 @@ RUN curl -sL "https://raw.githubusercontent.com/arkmanager/ark-server-tools/$AMG
 
 ARG AMG_BUILD
 FROM arkmanager-$AMG_BUILD
+
+LABEL maintainer="HomeLabHD <homelabhelp@gmail.com>" \
+    org.opencontainers.image.title="ark-se-oci" \
+    org.opencontainers.image.description="ARK: Survival Evolved dedicated server with optional RCON health endpoint" \
+    org.opencontainers.image.source="https://github.com/HomeLabHD/ark-se-oci" \
+    org.opencontainers.image.url="https://hub.docker.com/r/hlhd/ark-se-oci" \
+    org.opencontainers.image.documentation="https://github.com/HomeLabHD/ark-se-oci#readme" \
+    org.opencontainers.image.licenses="MIT" \
+    org.opencontainers.image.vendor="HomeLabHD"
+
 RUN ln -s /usr/local/bin/arkmanager /usr/bin/arkmanager
 
 COPY arkmanager/arkmanager.cfg /etc/arkmanager/arkmanager.cfg

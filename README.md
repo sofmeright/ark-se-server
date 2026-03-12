@@ -27,8 +27,9 @@ ARK: Survival Evolved dedicated server image, for single instances and clusters.
 | Install             | [Docker, Compose & Kubernetes](docs/Install.md)     |
 | Configuration       | [Environment Variables & Volumes](docs/Configuration.md) |
 | arkmanager          | [arkmanager/ark-server-tools](https://github.com/arkmanager/ark-server-tools) |
-| Health Server       | [RCON Health Endpoint](docs/HealthServer.md)        |
 | Clustering          | [Multi-Map Cluster Setup](docs/Clustering.md)       |
+| Health Server       | [RCON Health Endpoint](docs/HealthServer.md)        |
+| Helm Chart          | [ark-server-charts](https://github.com/SickHub/ark-server-charts)             |
 
 ## Quick Start
 
