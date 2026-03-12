@@ -3,8 +3,8 @@ version: 1
 vars:
   org: hlhd
   github_org: HomeLabHD
-  gitlab_group: PrPlanIT/homelabhd
-  repo: ark-se-oci
+  gitlab_group: PrPlanIT/HomeLabHD
+  repo: ark-se-server
 
 sources:
   primary:
